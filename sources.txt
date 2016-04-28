@@ -1,0 +1,10 @@
+F:\mybotJava\bot\BotParser.java
+F:\mybotJava\bot\BotStarter.java
+F:\mybotJava\bot\BotState.java
+F:\mybotJava\field\Cell.java
+F:\mybotJava\field\CellType.java
+F:\mybotJava\field\Field.java
+F:\mybotJava\field\Shape.java
+F:\mybotJava\field\ShapeType.java
+F:\mybotJava\moves\MoveType.java
+F:\mybotJava\player\Player.java
