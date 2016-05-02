@@ -76,6 +76,7 @@ public class Field {
 		return this.width;
 	}
 
+	//check if piece can still move down
 	public boolean hasDown(Shape piece){
 		Shape tempPiece = piece.clone();
 		tempPiece.oneDown();
@@ -87,6 +88,7 @@ public class Field {
 		return true;
 	}
 
+	//check if piece can still move left
 	public boolean hasLeft(Shape piece){
 		Shape tempPiece = piece.clone();
 		tempPiece.oneLeft();
@@ -98,6 +100,7 @@ public class Field {
 		return true;
 	}
 
+	//calculate the reward according to hole and row clean
 	public int getReward(){
 		int score = 0;
 		boolean line = true;
@@ -115,6 +118,7 @@ public class Field {
 		return score;
 	}
 
+	//create a new field string for the new field
 	private String newstate() {
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < this.height; i++) {
@@ -142,6 +146,7 @@ public class Field {
 		return builder.toString();
 	}
 
+	//copy the field
 	public Field clone(){
 		return new Field(this.width, this.height, this.newstate());
 	}
@@ -154,12 +159,17 @@ public class Field {
 		this.grid[x][y].setBlock();
 	}
 
+	//add the new pice into field
 	public void addPiece(Shape piece){
-		for(Cell single : piece.getBlocks()){
-			setCell(single);
+		for(int i = 0; i < piece.getBlocks().length; i++){
+			setCell(piece.getBlocks()[i]);
 		}
+		// for(Cell single : piece.getBlocks()){
+		// 	setCell(single);
+		// }
 	}
 
+	//check if the new piece fit into the field
 	public boolean isValid(Shape piece){
 		Cell[] tempBlocks = piece.getBlocks();
 		for(int i = 0; i < tempBlocks.length; i++){
@@ -169,6 +179,7 @@ public class Field {
 		return true;
 	}
 
+	//get the height of current block
 	public int blockHeight(){
 		int bheight = 0;
 		boolean done = false;

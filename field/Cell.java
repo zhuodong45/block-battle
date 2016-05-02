@@ -61,7 +61,6 @@ public class Cell {
 	public void setShape() {
 		this.state = CellType.SHAPE;
 	}
-
 	public void setBlock() {
 		this.state = CellType.BLOCK;
 	}
