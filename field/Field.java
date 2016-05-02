@@ -103,18 +103,24 @@ public class Field {
 	//calculate the reward according to hole and row clean
 	public int getReward(){
 		int score = 0;
-		boolean line = true;
+		int lineCount = 0;
 		int h = this.blockHeight();
 		for (int i = h; i < 20; i++){
-			for (int j = 0; j < 10; j++)
+			boolean line = true;
+			for (int j = 0; j < 10; j++){
 				if (this.grid[j][i].isEmpty()){
-					score -= i;
+					score -= (i*5);
 					line = false;
 				}
+			}
+			if(line == true){
+				lineCount++;
+			}
 		}
-		if (line == true){
-			score += 100;
-		}
+		score += (lineCount*40);
+		score += this.getWellSums()*-3;
+		score += this.getColumnTransitions()*-8;
+		// score += h*-3;
 		return score;
 	}
 
@@ -164,9 +170,6 @@ public class Field {
 		for(int i = 0; i < piece.getBlocks().length; i++){
 			setCell(piece.getBlocks()[i]);
 		}
-		// for(Cell single : piece.getBlocks()){
-		// 	setCell(single);
-		// }
 	}
 
 	//check if the new piece fit into the field
@@ -195,5 +198,59 @@ public class Field {
 				}
 		}
 		return bheight;
+	}
+
+	public int getWellSums() {
+		int well_sums = 0;
+		for(int r = 0; r < this.height; r++){
+			for(int c = 1; c < this.width-1; c++){
+				if(this.grid[c][r].isEmpty() && this.grid[c-1][r].isBlock() && this.grid[c+1][r].isBlock()) {
+					well_sums++;
+					for (int k = r+1; k<this.height; k++)
+						if(this.grid[c][k].isEmpty())
+							well_sums++;
+						else
+							break;
+				}
+			}
+		}
+		for(int r = 0; r < this.height; r++){
+			if(this.grid[0][r].isEmpty() && this.grid[1][r].isBlock()) {
+				well_sums++;
+				for (int k = r+1; k<this.height; k++)
+					if(this.grid[0][k].isEmpty())
+						well_sums++;
+			}
+		}
+		for(int r = 0; r < this.height; r++){
+			if(this.grid[this.width-1][r].isEmpty() && this.grid[this.width-2][r].isBlock()) {
+				well_sums++;
+				for (int k = r+1; k<this.height; k++)
+					if(this.grid[this.width-1][k].isEmpty())
+						well_sums++;
+			}
+		}
+		return well_sums;
+	}
+	public int getColumnTransitions() {
+		int transitions = 0;
+		Cell last = new Cell();
+		for(int c = 0; c < this.width; c++){
+			last.setEmpty();
+			for(int r = 0; r < this.height; r++){
+				if(this.grid[c][r].isSolid())
+					break;
+				if(this.grid[c][r].isShape())
+					continue;
+				if (this.grid[c][r].isEmpty() != last.isEmpty() ) {
+					transitions++;
+					if (last.isEmpty())
+						last.setBlock();
+					else
+						last.setEmpty();
+				}
+			}
+		}
+		return transitions;
 	}
 }
