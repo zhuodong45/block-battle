@@ -109,7 +109,7 @@ public class Field {
 			boolean line = true;
 			for (int j = 0; j < 10; j++){
 				if (this.grid[j][i].isEmpty()){
-					score -= (i*5);
+					score -= (i);
 					line = false;
 				}
 			}
@@ -117,10 +117,7 @@ public class Field {
 				lineCount++;
 			}
 		}
-		score += (lineCount*40);
-		score += this.getWellSums()*-3;
-		score += this.getColumnTransitions()*-8;
-		// score += h*-3;
+		score += (lineCount*138);
 		return score;
 	}
 
@@ -198,59 +195,5 @@ public class Field {
 				}
 		}
 		return bheight;
-	}
-
-	public int getWellSums() {
-		int well_sums = 0;
-		for(int r = 0; r < this.height; r++){
-			for(int c = 1; c < this.width-1; c++){
-				if(this.grid[c][r].isEmpty() && this.grid[c-1][r].isBlock() && this.grid[c+1][r].isBlock()) {
-					well_sums++;
-					for (int k = r+1; k<this.height; k++)
-						if(this.grid[c][k].isEmpty())
-							well_sums++;
-						else
-							break;
-				}
-			}
-		}
-		for(int r = 0; r < this.height; r++){
-			if(this.grid[0][r].isEmpty() && this.grid[1][r].isBlock()) {
-				well_sums++;
-				for (int k = r+1; k<this.height; k++)
-					if(this.grid[0][k].isEmpty())
-						well_sums++;
-			}
-		}
-		for(int r = 0; r < this.height; r++){
-			if(this.grid[this.width-1][r].isEmpty() && this.grid[this.width-2][r].isBlock()) {
-				well_sums++;
-				for (int k = r+1; k<this.height; k++)
-					if(this.grid[this.width-1][k].isEmpty())
-						well_sums++;
-			}
-		}
-		return well_sums;
-	}
-	public int getColumnTransitions() {
-		int transitions = 0;
-		Cell last = new Cell();
-		for(int c = 0; c < this.width; c++){
-			last.setEmpty();
-			for(int r = 0; r < this.height; r++){
-				if(this.grid[c][r].isSolid())
-					break;
-				if(this.grid[c][r].isShape())
-					continue;
-				if (this.grid[c][r].isEmpty() != last.isEmpty() ) {
-					transitions++;
-					if (last.isEmpty())
-						last.setBlock();
-					else
-						last.setEmpty();
-				}
-			}
-		}
-		return transitions;
 	}
 }
