@@ -101,23 +101,12 @@ public class Field {
 	}
 
 	//calculate the reward according to hole and row clean
-	public int getReward(){
+	public int getReward(Shape piece){
 		int score = 0;
-		int lineCount = 0;
-		int h = this.blockHeight();
-		for (int i = h; i < 20; i++){
-			boolean line = true;
-			for (int j = 0; j < 10; j++){
-				if (this.grid[j][i].isEmpty()){
-					score -= (i);
-					line = false;
-				}
-			}
-			if(line == true){
-				lineCount++;
-			}
-		}
-		score += (lineCount*138);
+		score += this.getHoles()*-5;
+		score += this.getLines()*10;
+		score += (20-piece.getLocation().getY())*-3;
+		score += this.getDiff()*-4;
 		return score;
 	}
 
@@ -195,5 +184,59 @@ public class Field {
 				}
 		}
 		return bheight;
+	}
+
+	//get hole count
+	public int getHoles() {
+		int count = 0;
+		for(int c = 0; c < this.width; c++){
+			boolean block = false;
+			for(int r = 0; r < this.height; r++){
+				if (this.grid[c][r].isBlock()) {
+					block = true;
+				}else if (this.grid[c][r].isEmpty() && block){
+					count++;
+				}
+			}
+		}
+		return count;
+	}
+
+	//get difference from highest to lowest
+	public int getDiff() {
+		int large = -1;
+		int small = 21;
+		for(int c = 0; c < this.width; c++){
+			boolean done = false;
+			for(int r = 0; r < this.height; r++){
+				if (this.grid[c][r].isBlock()) {
+					if(r < large)
+						large = r;
+					if(r > small)
+						small = r;
+					break;
+				}
+			}
+		}
+		return small - large;
+	}
+
+	//get clean line
+	public int getLines(){
+		int count = 0;
+		boolean line;
+		for(int i = 0; i < 20; i++){
+			line = true;
+			for(int j = 0; j < 10; j++){
+				if(this.grid[j][i].isEmpty()||this.grid[j][i].isSolid()){
+					line = false;
+					break;
+				}
+			}
+			if(line){
+				count++;
+			}
+		}
+		return count;
 	}
 }

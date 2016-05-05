@@ -108,7 +108,7 @@ public class BotStarter {
 				int score;
 				Field tempField = field.clone();	//copy a temp field
 				tempField.addPiece(copyPiece);	//add current piece into temp field
-				score = tempField.getReward();	//calculate the current reward
+				score = tempField.getReward(copyPiece);	//calculate the current reward
 				if (nPiece != null) {
 					Shape next = nPiece.clone();
 					int[] secondReward = getBestReward(tempField, next, null);
