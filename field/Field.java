@@ -106,7 +106,7 @@ public class Field {
 		score += this.getHoles()*-5;
 		score += this.getLines()*10;
 		score += (20-piece.getLocation().getY())*-3;
-		score += this.getDiff()*-4;
+		score += this.getDiff()*-1;
 		return score;
 	}
 
@@ -199,6 +199,38 @@ public class Field {
 				}
 			}
 		}
+
+		//special case, not a real hole, both side are block and top is empty, waiting for I shape piece
+		int iholes = 0;
+		for(int r = 0; r < this.height; r++){
+			for(int c = 1; c < this.width-1; c++){
+				if(this.grid[c][r].isEmpty() && this.grid[c-1][r].isBlock() && this.grid[c+1][r].isBlock()) {
+					iholes++;
+					for (int k = r+1; k<this.height; k++)
+						if(this.grid[c][k].isEmpty())
+							iholes++;
+						else
+							break;
+				}
+			}
+		}
+		for(int r = 0; r < this.height; r++){
+			if(this.grid[0][r].isEmpty() && this.grid[1][r].isBlock()) {
+				iholes++;
+				for (int k = r+1; k<this.height; k++)
+					if(this.grid[0][k].isEmpty())
+						iholes++;
+			}
+		}
+		for(int r = 0; r < this.height; r++){
+			if(this.grid[this.width-1][r].isEmpty() && this.grid[this.width-2][r].isBlock()) {
+				iholes++;
+				for (int k = r+1; k<this.height; k++)
+					if(this.grid[this.width-1][k].isEmpty())
+						iholes++;
+			}
+		}
+		count += (iholes/2);
 		return count;
 	}
 
